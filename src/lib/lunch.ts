@@ -1,4 +1,4 @@
-import Decimal from "decimal.js";
+import Decimal from 'decimal.js';
 
 type LunchPaymentResult = {
   cardPayments: number[];
@@ -6,8 +6,8 @@ type LunchPaymentResult = {
 };
 
 // Official lunch benefit limits
-const LUNCH_MIN = new Decimal("11.73");
-const LUNCH_MAX = new Decimal("14.00");
+const LUNCH_MIN = new Decimal('11.73');
+const LUNCH_MAX = new Decimal('14.00');
 
 export const calculateOptimalLunchDistribution = (sum: number): LunchPaymentResult => {
   if (!Number.isFinite(sum) || sum <= 0) {
