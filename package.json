@@ -11,6 +11,7 @@
     "start": "node --enable-source-maps dist/index.js",
     "build": "tsup src/index.ts --format esm --platform node --target node20 --sourcemap --clean",
     "typecheck": "tsc --noEmit",
+    "types:sync": "typesync",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -31,6 +32,7 @@
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.27.0"
+    "typescript-eslint": "^8.27.0",
+    "typesync": "^0.14.3"
   }
 }
