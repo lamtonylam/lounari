@@ -10,7 +10,6 @@ const LUNCH_MIN = new Decimal("11.73");
 const LUNCH_MAX = new Decimal("14.00");
 
 export const calculateOptimalLunchDistribution = (sum: number): LunchPaymentResult => {
-  // 1. Handle invalid or empty amounts
   if (!Number.isFinite(sum) || sum <= 0) {
     return { cardPayments: [], cashPayments: 0 };
   }
