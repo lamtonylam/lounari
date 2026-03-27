@@ -10,6 +10,9 @@ jobs:
   test-and-build:
     name: Test and Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -19,16 +22,40 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Check formatting
+        id: format
+        continue-on-error: true
         run: npm run format:check
 
       - name: Run linter
+        id: lint
+        continue-on-error: true
         run: npm run lint
+
+      - name: Auto-fix formatting and linting
+        if: steps.format.outcome == 'failure' || steps.lint.outcome == 'failure'
+        run: |
+          npm run format
+          npm run lint -- --fix || true
+
+      - name: Create Pull Request with fixes
+        if: steps.format.outcome == 'failure' || steps.lint.outcome == 'failure'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: auto-fix formatting and linting"
+          title: "chore: auto-fix formatting and linting"
+          body: "Automated PR to fix formatting and linting issues."
+          branch: "auto-fix-lint-format-${{ github.run_id }}"
+          delete-branch: true
+
+      - name: Fail if format or lint issues were found
+        if: steps.format.outcome == 'failure' || steps.lint.outcome == 'failure'
+        run: exit 1
 
       - name: Run tests
         run: npm run test
